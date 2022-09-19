@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>370</width>
-    <height>209</height>
+    <width>467</width>
+    <height>226</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,15 +18,15 @@
     <rect>
      <x>40</x>
      <y>50</y>
-     <width>301</width>
-     <height>21</height>
+     <width>300</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="toolTip">
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;select file or directory&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="text">
-    <string>select file..</string>
+    <string>...</string>
    </property>
    <property name="readOnly">
     <bool>true</bool>
@@ -35,10 +35,10 @@
   <widget class="QPushButton" name="encode_or_decode_button">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>270</x>
      <y>100</y>
-     <width>111</width>
-     <height>31</height>
+     <width>110</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="text">
@@ -48,8 +48,8 @@
   <widget class="QToolButton" name="choose_file_button">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>100</y>
+     <x>360</x>
+     <y>50</y>
      <width>90</width>
      <height>30</height>
     </rect>
@@ -61,11 +61,49 @@
   <widget class="QPlainTextEdit" name="info">
    <property name="geometry">
     <rect>
-     <x>63</x>
+     <x>80</x>
      <y>150</y>
      <width>261</width>
-     <height>31</height>
+     <height>25</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="password_label">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>100</y>
+     <width>60</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>password:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="password">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>100</y>
+     <width>110</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>110</width>
+     <height>16777215</height>
+    </size>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;input password&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="maxLength">
+    <number>9</number>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
    </property>
   </widget>
  </widget>

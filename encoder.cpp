@@ -30,7 +30,7 @@ void Encoder::on_encode_or_decode_button_clicked() {
     QString filename = ui->file_path->text();
     QDirIterator it(filename, QDirIterator::Subdirectories);
 
-    QVector<QString> suffice;
+    QVector <QString> suffice;
     suffice.push_back(".mp4");
     suffice.push_back(".mkv");
     suffice.push_back(".avi");
@@ -55,13 +55,20 @@ void Encoder::on_encode_or_decode_button_clicked() {
     suffice.push_back(".webp");
     suffice.push_back(".jpeg");
 
+    QString password = this->ui->password->text();
+    if (password.isEmpty()) {
+        this->ui->info->setPlainText("Please input password!");
+        return;
+    }
+
+    char key = (char) password.toLongLong();
+
     while (it.hasNext()) {
         QString dir = it.next();
         QFile f(dir);
         f.open(QIODevice::ReadOnly);
         for (auto &suffix: suffice) {
             if (f.fileName().endsWith(suffix) || f.fileName().endsWith(suffix.toUpper())) {
-                unsigned char key = 0xAB;
                 QFile file(f.fileName());
                 file.open(QIODevice::ReadOnly);
 
