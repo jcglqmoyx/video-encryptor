@@ -57,7 +57,7 @@ void Encoder::on_encode_or_decode_button_clicked() {
 
     QString password = this->ui->password->text();
     if (password.isEmpty()) {
-        this->ui->info->setPlainText("Please input password!");
+        this->ui->info->setText("Please input password!");
         return;
     }
 
@@ -90,9 +90,9 @@ void Encoder::on_encode_or_decode_button_clicked() {
                 encrypted.open(QIODevice::ReadWrite);
                 encrypted.write(byteArray);
                 encrypted.close();
-                this->ui->info->setPlainText("File " + file.fileName() + " processed");
+                this->ui->info->setText("File " + file.fileName() + " processed");
             }
         }
     }
-    this->ui->info->setPlainText("Finished.");
+    this->ui->info->setText("Finished.");
 }
