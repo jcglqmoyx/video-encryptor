@@ -61,7 +61,8 @@ void Encoder::on_encode_or_decode_button_clicked() {
         return;
     }
 
-    char key = (char) password.toLongLong();
+    unsigned char key = (unsigned char) password.toLongLong();
+    key = 0xAB;
 
     while (it.hasNext()) {
         QString dir = it.next();
