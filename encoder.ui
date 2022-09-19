@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>381</width>
-    <height>169</height>
+    <width>370</width>
+    <height>209</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -56,6 +56,16 @@
    </property>
    <property name="text">
     <string>choose file</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="info">
+   <property name="geometry">
+    <rect>
+     <x>63</x>
+     <y>150</y>
+     <width>261</width>
+     <height>31</height>
+    </rect>
    </property>
   </widget>
  </widget>

@@ -5,7 +5,7 @@
 #include <QDirIterator>
 #include <QFile>
 #include <QFileDialog>
-#include <QSet>
+#include <QVector>
 #include <QString>
 #include <QTextStream>
 
@@ -30,14 +30,30 @@ void Encoder::on_encode_or_decode_button_clicked() {
     QString filename = ui->file_path->text();
     QDirIterator it(filename, QDirIterator::Subdirectories);
 
-    QSet <QString> suffice;
-    suffice.insert(".mp4");
-    suffice.insert(".mkv");
-    suffice.insert(".avi");
-    suffice.insert(".flv");
-    suffice.insert(".wmv");
-    suffice.insert(".mov");
-    suffice.insert(".ogg");
+    QVector<QString> suffice;
+    suffice.push_back(".mp4");
+    suffice.push_back(".mkv");
+    suffice.push_back(".avi");
+    suffice.push_back(".flv");
+    suffice.push_back(".wmv");
+    suffice.push_back(".mov");
+
+    suffice.push_back(".mp3");
+    suffice.push_back(".wav");
+    suffice.push_back(".wma");
+    suffice.push_back(".ogg");
+    suffice.push_back(".aac");
+    suffice.push_back(".mod");
+    suffice.push_back(".flac");
+    suffice.push_back(".alac");
+
+    suffice.push_back(".gif");
+    suffice.push_back(".png");
+    suffice.push_back(".jpg");
+    suffice.push_back(".bmp");
+    suffice.push_back(".svg");
+    suffice.push_back(".webp");
+    suffice.push_back(".jpeg");
 
     while (it.hasNext()) {
         QString dir = it.next();
@@ -61,9 +77,9 @@ void Encoder::on_encode_or_decode_button_clicked() {
                 encrypted.open(QIODevice::ReadWrite);
                 encrypted.write(byteArray);
                 encrypted.close();
-
-                qDebug() << file.fileName() << " proccessed.";
+                this->ui->info->setPlainText("File " + file.fileName() + " processed");
             }
         }
     }
+    this->ui->info->setPlainText("Finished.");
 }
