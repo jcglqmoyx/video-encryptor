@@ -48,17 +48,21 @@ void Encoder::on_encode_or_decode_button_clicked() {
                 unsigned char key = 0xAB;
                 QFile file(f.fileName());
                 file.open(QIODevice::ReadOnly);
-                QByteArray byteArray = file.readAll();
-                for (int i = 0; i < byteArray.length(); i++) {
+
+                int len = 100;
+
+                QByteArray byteArray = file.read(len);
+                for (int i = 0; i < len; i++) {
                     byteArray[i] = byteArray[i] ^ key;
                 }
                 file.close();
 
                 QFile encrypted(f.fileName());
-                encrypted.open(QIODevice::WriteOnly);
+                encrypted.open(QIODevice::ReadWrite);
                 encrypted.write(byteArray);
                 encrypted.close();
-                qDebug() << file.fileName();
+
+                qDebug() << file.fileName() << " proccessed.";
             }
         }
     }
