@@ -5,9 +5,10 @@
 #include <QDirIterator>
 #include <QFile>
 #include <QFileDialog>
-#include <QVector>
+#include <QSet>
 #include <QString>
 #include <QTextStream>
+#include <QDateTime>
 
 Encoder::Encoder(QWidget *parent) : QWidget(parent), ui(new Ui::Encoder) {
     ui->setupUi(this);
@@ -30,69 +31,69 @@ void Encoder::on_encode_or_decode_button_clicked() {
     QString filename = ui->file_path->text();
     QDirIterator it(filename, QDirIterator::Subdirectories);
 
-    QVector <QString> suffice;
-    suffice.push_back(".mp4");
-    suffice.push_back(".mkv");
-    suffice.push_back(".avi");
-    suffice.push_back(".flv");
-    suffice.push_back(".wmv");
-    suffice.push_back(".mov");
-
-    suffice.push_back(".mp3");
-    suffice.push_back(".wav");
-    suffice.push_back(".wma");
-    suffice.push_back(".ogg");
-    suffice.push_back(".aac");
-    suffice.push_back(".mod");
-    suffice.push_back(".flac");
-    suffice.push_back(".alac");
-
-    suffice.push_back(".gif");
-    suffice.push_back(".png");
-    suffice.push_back(".jpg");
-    suffice.push_back(".bmp");
-    suffice.push_back(".svg");
-    suffice.push_back(".webp");
-    suffice.push_back(".jpeg");
-
     QString password = this->ui->password->text();
     if (password.isEmpty()) {
-        this->ui->info->setText("Please input password!");
+        this->ui->info->setText("请输入密码");
         return;
     }
 
     int mod = 1e8 + 7;
     int x = 0;
     for (QChar c: password) {
-       x = x * 10 + c.toLatin1();
-       x %= mod;
+        x = x * 10 + c.toLatin1();
+        x %= mod;
     }
     unsigned char key = (unsigned char) x;
 
+    QSet <QString> audio_file_suffice;
+    audio_file_suffice.insert(".mp3");
+    audio_file_suffice.insert(".wav");
+    audio_file_suffice.insert(".wma");
+    audio_file_suffice.insert(".ogg");
+    audio_file_suffice.insert(".aac");
+    audio_file_suffice.insert(".mod");
+    audio_file_suffice.insert(".flac");
+    audio_file_suffice.insert(".alac");
     while (it.hasNext()) {
         QString dir = it.next();
         QFile f(dir);
+        if (f.fileName().endsWith("_info.txt")) {
+            continue;
+        }
         f.open(QIODevice::ReadOnly);
-        for (auto &suffix: suffice) {
-            if (f.fileName().endsWith(suffix) || f.fileName().endsWith(suffix.toUpper())) {
-                QFile file(f.fileName());
-                file.open(QIODevice::ReadOnly);
+        QFile file(f.fileName());
+        file.open(QIODevice::ReadOnly);
+        if (!file.isReadable()) continue;
 
-                int len = 100;
-
-                QByteArray byteArray = file.read(len);
-                for (int i = 0; i < len; i++) {
-                    byteArray[i] = byteArray[i] ^ key;
-                }
-                file.close();
-
-                QFile encrypted(f.fileName());
-                encrypted.open(QIODevice::ReadWrite);
-                encrypted.write(byteArray);
-                encrypted.close();
-                this->ui->info->setText("File " + file.fileName() + " processed");
+        int len = 100;
+        for (auto &suffix: audio_file_suffice) {
+            if (file.fileName().endsWith(suffix)) {
+                len = file.size();
             }
         }
+
+        QByteArray byteArray = file.read(len);
+        for (int i = 0; i < len; i++) {
+            byteArray[i] = byteArray[i] ^ key;
+        }
+        file.close();
+
+        QFile encrypted(f.fileName());
+        encrypted.open(QIODevice::ReadWrite);
+        encrypted.write(byteArray);
+        encrypted.close();
+        this->ui->info->setText("File " + file.fileName() + " 处理完成");
     }
-    this->ui->info->setText("Finished.");
+    QDateTime current_date_time = QDateTime::currentDateTime();
+    QString current_date = current_date_time.toString("yyyy-MM-dd hh:mm:ss");
+
+    QFile file(filename + "/" + current_date + "_info.txt");
+    file.open(QIODevice::ReadWrite);
+    QTextStream out(&file);
+    out << "操作时间：" + current_date << '\n';
+    out << "执行加密/解密操作的文件夹：" + filename << '\n';
+    out << "密码：" << password << '\n';
+    out << '\n';
+
+    this->ui->info->setText(current_date + ": 处理完成.");
 }
